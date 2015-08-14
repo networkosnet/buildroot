@@ -1,0 +1,6 @@
+config BR2_PACKAGE_HOST_NIM
+    bool "host nim"
+    help
+      Nim programming language.
+
+      http://nim-lang.org/
