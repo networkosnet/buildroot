@@ -1014,7 +1014,7 @@ menu "Networking"
 	source "package/libvncserver/Config.in"
 	source "package/libwebsock/Config.in"
 	source "package/libwebsockets/Config.in"
-	source "package/neon/Config.in"
+    source "package/neon/Config.in"
 	source "package/nss-mdns/Config.in"
 	source "package/omniorb/Config.in"
 	source "package/openldap/Config.in"
@@ -1166,6 +1166,10 @@ menu "Miscellaneous"
 	source "package/shared-mime-info/Config.in"
 	source "package/snowball-init/Config.in"
 	source "package/wine/Config.in"
+endmenu
+
+menu "NetworkOS"
+    source "package/netd/Config.in"
 endmenu
 
 menu "Networking applications"

@@ -1,5 +1,4 @@
 
-
 ifeq ($(BR2_i386),y)
 NIM_CPU = i386
 else ifeq ($(BR2_x86_64),y)
@@ -31,26 +30,43 @@ define inner-nim-package
 
 $(2)_DEPENDENCIES += host-nim
 
+ifeq ($(4),target)
+$(2)_NIM_FLAGS += -d:useFork --cpu:$(NIM_CPU) --os:linux
+endif
+
 ifndef $(2)_BUILD_CMDS
 define $(2)_BUILD_CMDS
 	(cd $$($$(PKG)_BUILDDIR)/; \
 	    for name in $$($$(PKG)_NIM_BINARIES); do \
 	      PATH="$$(HOST_DIR)/usr/bin:$$$$PATH" \
 		  $$($$(PKG)_BASE_ENV) $$($$(PKG)_ENV) \
-	      $$(HOST_DIR)/usr/bin/nim compile -d:useFork --cpu:$$(NIM_CPU) --os:linux --parallelBuild:1 $$$$name; done)
+	      $$(HOST_DIR)/usr/bin/nim compile $$($(2)_NIM_FLAGS) --parallelBuild:1 $$$$name; done)
 endef
 endif
 
 ifndef $(2)_INSTALL_CMDS
 define $(2)_INSTALL_CMDS
-	for name in $$($$(PKG)_NIM_BINARIES); do $$(INSTALL) $$($$(PKG)_BUILDDIR)/bin/"$$$$name" $$(TARGET_DIR)/usr/bin; done
+
+endef
+endif
+
+ifndef $(2)_INSTALL_TARGET_CMDS
+define $(2)_INSTALL_TARGET_CMDS
+	for name in $$($$(PKG)_NIM_BINARIES); do \
+		$$(INSTALL) $$($$(PKG)_BUILDDIR)/bin/$$$$name $$(TARGET_DIR)/usr/bin; \
+	done
+endef
+endif
+
+ifndef $(2)_INSTALL_STAGING_CMDS
+define $(2)_INSTALL_STAGING_CMDS
+
 endef
 endif
 
 $(call inner-generic-package,$(1),$(2),$(3),$(4))
 
 endef
-
 
 
 nim-package = $(call inner-nim-package,$(pkgname),$(call UPPERCASE,$(pkgname)),$(call UPPERCASE,$(pkgname)),target)
