@@ -2,5 +2,6 @@ config BR2_PACKAGE_NETD
     bool "netd"
     select BR2_HOST_NIM
     select BR2_PACKAGE_IPROUTE2
+    select BR2_PACKAGE_PCRE
     help
         netd advanced network manager
